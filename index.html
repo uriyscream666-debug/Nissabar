@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>НИССА BAR — Меню</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🍸 НИССА BAR</h1>
+            <p class="tagline">Авторская миксология • Средиземноморская атмосфера</p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container">
+            <button class="nav-btn active" data-category="all">Все</button>
+            <button class="nav-btn" data-category="aperitifs">Аперитивы</button>
+            <button class="nav-btn" data-category="whisky">Виски</button>
+            <button class="nav-btn" data-category="rum">Ром</button>
+            <button class="nav-btn" data-category="distillates">Дистилляты</button>
+            <button class="nav-btn" data-category="gin-tequila">Джин / Текила</button>
+            <button class="nav-btn" data-category="vodka">Водка</button>
+            <button class="nav-btn" data-category="cocktails">Коктейли</button>
+            <button class="nav-btn" data-category="infusions">Настойки</button>
+            <button class="nav-btn" data-category="lemonades">Лимонады</button>
+            <button class="nav-btn" data-category="coffee">Кофе</button>
+            <button class="nav-btn" data-category="tea">Чай</button>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <h2 class="section-title" id="sectionTitle">Все напитки</h2>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <div class="modal-meta">
+                    <span id="modalVolume"></span>
+                    <span id="modalPrice"></span>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 НИССА BAR. Все права защищены.</p>
+            <p>Ресторан «НИССА» • Ежедневно с 12:00 до 00:00</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
