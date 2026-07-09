@@ -3,63 +3,1589 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>НИССА BAR — Меню</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>НИССА БАР - Меню</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            color: #1e3c72;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .nav-menu {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-menu h3 {
+            margin-bottom: 15px;
+            color: #1e3c72;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .category-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .category-header h2 {
+            font-size: 1.8em;
+            margin: 0;
+        }
+
+        .category-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .category.active .category-icon {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .category.active .category-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid #667eea;
+        }
+
+        .menu-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .menu-item-volume {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .menu-item-price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #c9a961;
+        }
+
+        .menu-item-description {
+            color: #666;
+            line-height: 1.6;
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .menu-item.expanded .menu-item-description {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .toggle-icon {
+            color: #667eea;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+            }
+            
+            .category-header h2 {
+                font-size: 1.3em;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #ffeaa7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 5px;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1 class="logo">🍸 НИССА BAR</h1>
-            <p class="tagline">Авторская миксология • Средиземноморская атмосфера</p>
-        </div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>🍸 НИССА БАР</h1>
+            <p>Авторские коктейли • Премиальный алкоголь • Уникальные настойки</p>
+        </header>
 
-    <nav class="nav">
-        <div class="container">
-            <button class="nav-btn active" data-category="all">Все</button>
-            <button class="nav-btn" data-category="aperitifs">Аперитивы</button>
-            <button class="nav-btn" data-category="whisky">Виски</button>
-            <button class="nav-btn" data-category="rum">Ром</button>
-            <button class="nav-btn" data-category="distillates">Дистилляты</button>
-            <button class="nav-btn" data-category="gin-tequila">Джин / Текила</button>
-            <button class="nav-btn" data-category="vodka">Водка</button>
-            <button class="nav-btn" data-category="cocktails">Коктейли</button>
-            <button class="nav-btn" data-category="infusions">Настойки</button>
-            <button class="nav-btn" data-category="lemonades">Лимонады</button>
-            <button class="nav-btn" data-category="coffee">Кофе</button>
-            <button class="nav-btn" data-category="tea">Чай</button>
-        </div>
-    </nav>
+        <nav class="nav-menu">
+            <h3> Быстрая навигация:</h3>
+            <div class="nav-buttons">
+                <a href="#aperitifs" class="nav-btn">🥃 Аперитивы</a>
+                <a href="#whisky" class="nav-btn">🥃 Виски</a>
+                <a href="#cocktails" class="nav-btn">🍹 Коктейли</a>
+                <a href="#tinctures" class="nav-btn">🌿 Настойки</a>
+                <a href="#lemonades" class="nav-btn">🍋 Лимонады</a>
+                <a href="#coffee" class="nav-btn">☕ Кофе</a>
+                <a href="#tea" class="nav-btn">🍵 Чай</a>
+                <a href="#beer" class="nav-btn">🍺 Пиво</a>
+            </div>
+        </nav>
 
-    <main class="main">
-        <div class="container">
-            <h2 class="section-title" id="sectionTitle">Все напитки</h2>
-            <div class="menu-grid" id="menuGrid"></div>
-        </div>
-    </main>
+        <!-- Аперитивы и дижестивы -->
+        <div class="category" id="aperitifs">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🥃 Аперитивы и дижестивы</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Амаро Монтенегро</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">760 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Итальянский горький ликёр</strong> на основе 40+ трав и специй. Идеальный дижестив для улучшения пищеварения. Вкус: травяной, с нотами цитрусовых и пряностей.
+                    </div>
+                </div>
 
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div class="modal-header">
-                <h2 id="modalTitle"></h2>
-                <div class="modal-meta">
-                    <span id="modalVolume"></span>
-                    <span id="modalPrice"></span>
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Ликер Ультра Юдзу <span class="highlight">🇯🇵 Япония</span></div>
+                            <div class="menu-item-volume">35 мл</div>
+                        </div>
+                        <div class="menu-item-price">710 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Премиальный японский цитрусовый ликёр</strong> из редкого фрукта юдзу. Уникальный вкус с нотами мандарина, лайма и грейпфрута.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Бехеровка</div>
+                            <div class="menu-item-volume">35 мл</div>
+                        </div>
+                        <div class="menu-item-price">700 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Легендарный чешский травяной ликёр</strong> из Карловых Вар. 32 вида трав и специй. Отличный аперитив или дижестив.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Фернет Бранка <span class="highlight">🇹 Италия</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">690 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Итальянский амаро</strong> с интенсивным травяным вкусом. Один из самых популярных дижестивов в мире.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Егермейстер <span class="highlight">🇩🇪 Германия</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">690 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Немецкий травяной ликёр</strong> из 56 трав, фруктов и специй. Подаётся охлаждённым.
+                    </div>
                 </div>
             </div>
-            <div class="modal-body" id="modalBody"></div>
         </div>
+
+        <!-- Виски -->
+        <div class="category" id="whisky">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🥃 Виски</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Макаллан Дабл Каск 12 лет <span class="highlight">⭐ Премиум</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">2,740 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Эталон спейсайдского односолодового виски</strong>. Выдержан в бочках из-под хереса и американского бурбона. Вкус: мёд, ваниль, сухофрукты, пряности. Идеален в чистом виде или со льдом.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Глен Грант Сингл Молт 18 лет</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,450 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Шотландский односолодовый виски</strong> с фруктовым характером. Выдержка 18 лет в бочках из-под бурбона и хереса.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Бельвуа Финисьон Сотерн</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Французский виски</strong> с финишной выдержкой в бочках из-под Сотерна. Уникальный сладковатый вкус.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Лок Ломанд Сингл Молт 12 лет</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,100 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Шотландский виски</strong> с характерным дымным вкусом. Выдержка 12 лет.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Ламбей Сингл Молт</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">940 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ирландский односолодовый виски</strong> с мягким фруктовым вкусом.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Чивас Ригал 12 лет</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">940 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Легендарный шотландский бленд</strong>. Сбалансированный вкус с нотами мёда, фруктов и специй.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Фудзиган 3 года <span class="highlight">🇯🇵 Япония</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">960 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Японский виски</strong> с уникальным характером. Лёгкий, фруктовый, с нотами ванили.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Джек Дэниелс <span class="highlight">🇺🇸 США</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">860 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Американский теннесси виски</strong>. Классический вкус с нотами карамели, ванили и дуба.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ром -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🏴‍️ Ром</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Матусалем Инсолито Вайн Каск</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,460 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Премиальный доминиканский ром</strong> с выдержкой в винных бочках. Уникальный вкус с винными нотами.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Матусалем Гран Резерва 23 года</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,200 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Возрастной ром</strong> с 23-летней выдержкой. Богатый вкус с нотами сухофруктов, специй и дуба.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Ром Абуэло Аньехо 7 лет <span class="highlight">🇵🇦 Панама</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">890 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Панамский ром</strong> с 7-летней выдержкой. Мягкий вкус с нотами карамели и ванили.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Благородные дистилляты -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🍷 Благородные дистилляты</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Коньяк Курвуазье ХО <span class="highlight">⭐ Премиум</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">3,200 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Премиальный коньяк</strong> категории XO (Extra Old). Выдержка не менее 10 лет. Богатый вкус с нотами сухофруктов, специй, цветов и дуба.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Коньяк Камю ВСОП</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,300 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Коньяк VSOP</strong> (Very Superior Old Pale). Выдержка от 4 лет. Фруктовый вкус с нотами ванили.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Коньяк Курвуазье ВС</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">960 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Коньяк VS</strong> (Very Special). Выдержка от 2 лет. Лёгкий фруктовый вкус.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Граппа Бьянко Фриулина Нонино <span class="highlight">🇮🇹 Италия</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">760 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Итальянская граппа</strong> из винограда сорта Фриулиано. Чистый виноградный аромат.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Граппа Нордини 3 года</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">780 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Выдержанная граппа</strong> 3 года в дубовых бочках. Мягкий вкус с древесными нотами.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Джин / Текила -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🌿 Джин / Текила</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Текила Класе Азул Репосадо <span class="highlight">💎 Ultra Premium</span></div>
+                            <div class="menu-item-volume">35 мл</div>
+                        </div>
+                        <div class="menu-item-price">5,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ультра-премиальная текила</strong> ручной работы. Выдержка 8 месяцев. Вкус: ваниль, мёд, сухофрукты, специи. Подаётся в уникальной синей бутылке.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Джин Маре <span class="highlight">🇸 Испания</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">910 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Средиземноморский джин</strong> с острова Менорка. Ботаникалы: оливковое дерево, розмарин, тимьян, лаванда. Идеален с тоником.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Джин Танглин Блэк Паудер</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">940 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Азиатский джин</strong> с уникальным профилем. 12 ботаникалов, включая имбирь и кардамон.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Текила Эль Текиленьо 1959 Кристалино</div>
+                            <div class="menu-item-volume">35 мл</div>
+                        </div>
+                        <div class="menu-item-price">890 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Кристалино текила</strong> - выдержанная текила, очищенная до прозрачности. Сочетает характер выдержки и чистоту бланко.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Текила Эль Текиленьо 1959 Платинум</div>
+                            <div class="menu-item-volume">35 мл</div>
+                        </div>
+                        <div class="menu-item-price">840 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Премиальная текила</strong> категории Platinum. Чистый вкус агавы.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Водка -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>💧 Водка</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Онегин</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">590 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Премиальная российская водка</strong>. Мягкий чистый вкус.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Чистые Росы Органик</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Органическая водка</strong> из натурального сырья. Без добавок.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Спельта</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Водка из спельты</strong> (полбы). Уникальный зерновой вкус.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Коктейли -->
+        <div class="category" id="cocktails">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🍹 Авторские коктейли</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Нитро Космо <span class="highlight">🌟 WOW-эффект</span></div>
+                            <div class="menu-item-volume">150 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Нитро-коктейль с эффектом облака</strong>. Настойка клюквы, сироп, кордиал, морс, насыщенный азотом N₂. Подаётся с облаком пара! Украшен сублимированной малиной.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Земляничный Спритц с мусом лемонграс</div>
+                            <div class="menu-item-volume">160 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Лёгкий спритц</strong>. Земляничная настойка, игристое вино, мус из маракуйи и лемонграса, сублимированная малина.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Лимончелло Спритц с мусом саган-дайля</div>
+                            <div class="menu-item-volume">160 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Цитрусовый спритц</strong>. Настойка лимончелло, игристое вино, мус с саган-дайля, лимонная цедра.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Россини с пеной из цветков зизифоры</div>
+                            <div class="menu-item-volume">155 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодный коктейль</strong>. Клубничное пюре, ликёр, игристое вино, пена из зизифоры. Украшен свежей клубникой.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Морошка Сауэр</div>
+                            <div class="menu-item-volume">125 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический сауэр</strong>. Настойка морошки, кордиал, яичный белок. Техника dry shake. Украшен цедрой апельсина.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Черничный Сауэр</div>
+                            <div class="menu-item-volume">105 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодный сауэр</strong>. Черничная настойка, ликёр крем де миртио, кордиал, белок. Подаётся с леденцом из изомальта.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Крыжовник Киви Сауэр</div>
+                            <div class="menu-item-volume">112 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Экзотический сауэр</strong>. Крыжовник, киви, лайм, белок. Украшен матчей.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Черника Кокос</div>
+                            <div class="menu-item-volume">142 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Milk washing коктейль</strong>. Черничная настойка, кокосовая пена. Кристально прозрачный с мягкой текстурой.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Земляничный Милкпанч</div>
+                            <div class="menu-item-volume">170 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Milk punch</strong>. Земляничная настойка, ром, вермут, очищенный молоком. Подаётся с шаром льда из каркаде.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Негрони</div>
+                            <div class="menu-item-volume">105 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический итальянский коктейль</strong>. Джин, биттер, красный вермут, клубничный уксус. Украшен цедрой апельсина.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Кленовый Олд Фэшн</div>
+                            <div class="menu-item-volume">115 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Авторский олд фэшн</strong>. Бурбон, амаро, кленовый сироп. Украшен грецким орехом.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Маргарита</div>
+                            <div class="menu-item-volume">125 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классическая маргарита</strong>. Текила, трипл сек, лайм. Опционально с солевой каймой.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Мохито / Клубничный</div>
+                            <div class="menu-item-volume">227 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Освежающий мохито</strong>. Ром, лайм, мята, содовая. Клубничная версия с пюре клубники.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Грейпфрутовый Мулл</div>
+                            <div class="menu-item-volume">160 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Цитрусовый мулл</strong>. Водка с грейпфрутом, имбирный эль, сироп грейпфрута. Украшен розмарином.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Пряная Слива</div>
+                            <div class="menu-item-volume">110 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,000 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Авторский коктейль</strong>. Пряная слива (ферментация 60 дней), вермуты, биттеры. Украшен мочёной сливой.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Настойки -->
+        <div class="category" id="tinctures">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🌿 Настойки Брата НИССА <span class="highlight">Sous-vide</span></h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="info-box" style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <strong>🏆 Наша гордость!</strong> Все настойки готовятся методом термомацерации sous-vide: ингредиенты в вакуумном пакете выдерживаются при +60°C в течение 2 часов. Подаются охлаждёнными из морозилки.
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">СЕТ НАСТОЕК ТОП-6 <span class="highlight">🎁 Выгодно</span></div>
+                            <div class="menu-item-volume">400 мл (6×50мл)</div>
+                        </div>
+                        <div class="menu-item-price">3,200 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Сет из 6 настоек:</strong> Сливянка, Крыжовник, Пряная груша, Вишнёвая, Ирга дикая, Северная морошка. Идеально для компании!
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Черничная (Ручной сбор) <span class="highlight">⭐</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Глубокая ягодная настойка</strong> с черничным джемом. Водка НИКИ ПЬЮР.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Чёрная смородина / Иван-чай <span class="highlight">⭐</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная с чайными нотами</strong>. Водка НИКИ ПЬЮР.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Кавказский кизил <span class="highlight">⭐</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Кисло-сладкая терпкая настойка</strong>. Водка НИКИ ПЬЮР.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Брусничная / Саган-Дайля <span class="highlight">⭐</span></div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная с бодрящим эффектом</strong>. Саган-дайля - шаманский чай из Бурятии.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Северная Морошка</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная с кислинкой</strong>. Водка Царская Серебро.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Земляничная</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Сладкая ягодная</strong>. Водка Царская Серебро.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Красная Смородина с перцем</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодно-пряная</strong>. Водка Царская Серебро, чёрный перец.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Клюква Ройбуш</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная с чайными нотами</strong>. Водка Царская, ройбуш, чернослив.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Пряная Груша</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Фруктовая со специями</strong>. Водка Царская Серебро, груша, специи для глинтвейна.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Лимончелло</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Цитрусовая сладкая</strong>. Водка Царская Серебро, цедра мандарина.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Клубничная</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная с лемонграссом</strong>. Ром Матусалем Платинум.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Малина Тархун</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодно-травяная</strong>. Ром Матусалем Платинум, тархун, каркаде.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Крыжовник Киви</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Кисло-сладкая экзотическая</strong>. Водка Царская Серебро.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Вишнёвая</div>
+                            <div class="menu-item-volume">50 мл</div>
+                        </div>
+                        <div class="menu-item-price">540 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодная на джине</strong>. Джин Танглин Сингапур.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Домашние лимонады -->
+        <div class="category" id="lemonades">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🍋 Домашние лимонады</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Лимонад в графине <span class="highlight">🎁 На компанию</span></div>
+                            <div class="menu-item-volume">800 мл</div>
+                        </div>
+                        <div class="menu-item-price">1,400 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>На выбор:</strong> Мандариновый, Малина-каламанси, Мохито, Кактус-лайм-мята, Дюшес, Щавель. 250 мл ПФ + 500 мл газировки. Выгоднее 3 порций!
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Мандариновый</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Цитрусовый освежающий</strong>. Мандарины, юдзу, молочная кислота. С джусболами.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Малина Маракуйя Лемонграсс</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Тропический</strong>. Малина, маракуйя, лемонграсс. С джусболами.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Кактус Мята Лайм</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Экзотический освежающий</strong>. Кактус, лайм, свежая мята.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Дюшес</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический грушевый</strong>. Грушевый топинг, слайсы груши, жёлтые джусболы.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Щавель</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Необычный кисловатый</strong>. Щавель, лайм, мята.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Мохито / Клубничный</div>
+                            <div class="menu-item-volume">300 мл</div>
+                        </div>
+                        <div class="menu-item-price">480 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Безалкогольный мохито</strong>. Лайм, мята, содовая. Клубничная версия с пюре.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кофе -->
+        <div class="category" id="coffee">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>☕ Кофе</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <div class="info-box" style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <strong>☕ Стандарт эспрессо:</strong> 18 г зерна → 36 г эспрессо за 25-30 сек. Температура 93°C, давление 9 бар.
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Эспрессо</div>
+                            <div class="menu-item-volume">30 мл</div>
+                        </div>
+                        <div class="menu-item-price">350 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический эспрессо</strong>. 15 г зерна. Плотная крема, насыщенный вкус.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Двойной Эспрессо</div>
+                            <div class="menu-item-volume">65 мл</div>
+                        </div>
+                        <div class="menu-item-price">380 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Даbl эспрессо</strong>. 20 г зерна. Для настоящих ценителей.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Капучино</div>
+                            <div class="menu-item-volume">180-200 мл</div>
+                        </div>
+                        <div class="menu-item-price">390 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический капучино</strong>. 1/3 эспрессо + 1/3 молоко + 1/3 микрофоам. Молоко +60°C.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Латте Макиато</div>
+                            <div class="menu-item-volume">250 мл</div>
+                        </div>
+                        <div class="menu-item-price">400 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Слоеный латте</strong>. Молоко + пена + эспрессо. Подаётся в высоком бокале.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Раф с карамелью</div>
+                            <div class="menu-item-volume">245 мл</div>
+                        </div>
+                        <div class="menu-item-price">490 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Взбитый кофейно-сливочный</strong>. Эспрессо + молоко + сливки 10% + карамельный сироп.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Флэт Уайт</div>
+                            <div class="menu-item-volume">160-180 мл</div>
+                        </div>
+                        <div class="menu-item-price">440 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Даbl эспрессо с тонкой пеной</strong>. 150 мл молока, пена 3-5 мм.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Матча Латте</div>
+                            <div class="menu-item-volume">282 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Японский зелёный чай</strong>. Матча + молоко. Взбивается венчиком.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Матча Латте (кокос/миндаль/банан)</div>
+                            <div class="menu-item-volume">282 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>На альтернативном молоке</strong>. Кокосовое, миндальное или банановое молоко.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Чай -->
+        <div class="category" id="tea">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🍵 Чай и Взвары</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <h3 style="margin: 20px 0 10px; color: #1e3c72;">🔥 Взвары (горячие напитки)</h3>
+                
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Мандарин Белый Кардамон</div>
+                            <div class="menu-item-volume">500 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Цитрусовый пряный</strong>. Мандарин-юдзу, белый кардамон. Температура +75°C.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Брусника Саган-Дайля</div>
+                            <div class="menu-item-volume">500 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Ягодный бодрящий</strong>. Брусника, саган-дайля (шаманский чай).
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Облепиха Мёд Корица</div>
+                            <div class="menu-item-volume">500 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Витаминный</strong>. Облепиха, мёд, корица.
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 10px; color: #1e3c72;">🌿 Травяные чаи (800 мл - 600 ₽)</h3>
+                
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Алтайский сбор трав</div>
+                            <div class="menu-item-volume">800 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Горные травы Алтая</strong>. Температура +95°C, 5-7 мин.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Таёжный сбор трав</div>
+                            <div class="menu-item-volume">800 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Травы тайги</strong>. Шишки, иглы пихты.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Иван Чай с листьями смородины</div>
+                            <div class="menu-item-volume">800 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классический иван-чай</strong> с листьями смородины.
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 10px; color: #1e3c72;">🫖 Классический чай (800 мл - 560 ₽)</h3>
+                
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Ассам / Эрл Грей / Сенча</div>
+                            <div class="menu-item-volume">800 мл</div>
+                        </div>
+                        <div class="menu-item-price">560 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Классические чаи</strong>. Ассам (чёрный), Эрл Грей (с бергамотом), Сенча (зелёный японский).
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Добавки к чаю</div>
+                            <div class="menu-item-volume">на выбор</div>
+                        </div>
+                        <div class="menu-item-price">160 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>На выбор:</strong> Мята, Чабрец, Липа, Корень имбиря, Лимон, Мёд.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пиво -->
+        <div class="category" id="beer">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <h2>🍺 Пиво</h2>
+                <span class="category-icon">▼</span>
+            </div>
+            <div class="category-content">
+                <h3 style="margin: 20px 0 10px; color: #1e3c72;">🍺 Разливное</h3>
+                
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">ИССА Витбир <span class="highlight">🇷🇺 Россия</span></div>
+                            <div class="menu-item-volume">300 мл / 500 мл</div>
+                        </div>
+                        <div class="menu-item-price">450 ₽ / 650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Пшеничное нефильтрованное</strong>. Лёгкое, освежающее, с нотами цитрусовых.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Штигль Гольдбрау <span class="highlight">🇹 Австрия</span></div>
+                            <div class="menu-item-volume">300 мл / 500 мл</div>
+                        </div>
+                        <div class="menu-item-price">550 ₽ / 750 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Золотой лагер</strong>. Классический австрийский вкус.
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 10px; color: #1e3c72;">🍾 Бутылочное</h3>
+                
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Корона Экстра <span class="highlight">🇽 Мексика</span></div>
+                            <div class="menu-item-volume">335 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Мексиканский лагер</strong>. Подаётся с лаймом.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Сан Мигель Лагер <span class="highlight">🇹 Италия</span></div>
+                            <div class="menu-item-volume">330 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Итальянский лагер</strong>. Лёгкий освежающий вкус.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Сан Мигель Б/А <span class="highlight">🇮🇹 Безалкогольное</span></div>
+                            <div class="menu-item-volume">330 мл</div>
+                        </div>
+                        <div class="menu-item-price">600 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Безалкогольный лагер</strong>. Вкус как у настоящего пива.
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="toggleItem(this)">
+                    <div class="menu-item-header">
+                        <div>
+                            <div class="menu-item-name">Бирра Моретти <span class="highlight">🇮🇹 Италия</span></div>
+                            <div class="menu-item-volume">330 мл</div>
+                        </div>
+                        <div class="menu-item-price">650 ₽</div>
+                    </div>
+                    <div class="menu-item-description">
+                        <strong>Итальянский лагер</strong>. Золотистый, сбалансированный.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>🍸 НИССА БАР</h3>
+            <p>Ждём вас в гости!</p>
+            <p style="margin-top: 10px; color: #666;">Все коктейли готовятся на авторских премиксах с использованием современных технологий: sous-vide, milk washing, нитро-коктейли, сифонные пены</p>
+        </footer>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p>© 2026 НИССА BAR. Все права защищены.</p>
-            <p>Ресторан «НИССА» • Ежедневно с 12:00 до 00:00</p>
-        </div>
-    </footer>
+    <script>
+        function toggleCategory(header) {
+            const category = header.parentElement;
+            const isActive = category.classList.contains('active');
+            
+            // Close all categories
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            
+            // Open clicked category if it wasn't active
+            if (!isActive) {
+                category.classList.add('active');
+            }
+        }
 
-    <script src="js/main.js"></script>
+        function toggleItem(item) {
+            const isExpanded = item.classList.contains('expanded');
+            
+            // Close all items
+            document.querySelectorAll('.menu-item').forEach(i => {
+                i.classList.remove('expanded');
+            });
+            
+            // Open clicked item if it wasn't expanded
+            if (!isExpanded) {
+                item.classList.add('expanded');
+            }
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Open the category
+                    const category = target.closest('.category');
+                    if (category) {
+                        category.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
